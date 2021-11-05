@@ -42,19 +42,52 @@ public class Meduse extends GameObject{
     public void movement(boolean left, boolean right, boolean jump, double dt){
         if (right && x+w < Main.WIDTH){
             vx += dt*ax;
-            updateX(dt);
         }
         else if (!right && vx > 0 && x+w < Main.WIDTH){
             vx -= dt*ax;
-            updateX(dt);
+        }
+        if (left && x > 0){
+            vx += dt*-ax;
+        }
+        else if (!left && vx < 0 && x > 0){
+            vx += dt*ax;
+        }
+
+        sauter(jump);
+        updateX(dt);
+        updateY(dt);
+        if (y + h < Main.HEIGHT) {
+            vy = vy + ay * dt;
+        }
+        else {
+            vy = 0;
         }
     }
 
-    public void updateX(double dt){
-        x += dt*vx;
+    //Fait sauter le personnage
+    public void sauter(boolean jump){
+        // Sauter avec Espace ou Flèche vers le haut
+        if (jump && y + h >= Main.HEIGHT)
+            vy = -600;
     }
 
+    //Update la position de Y
+    public void updateY(double dt){
+        y += dt*vy;
+    }
 
+    //Update la position de X
+    public void updateX(double dt){
+        x += dt*vx;
+        if (x < 0){
+            x = 0;
+            vx *= -0.9;
+        }
+        else if (x + w > Main.WIDTH){
+            x = Main.WIDTH-w;
+            vx *= -0.5;
+        }
+    }
 
     //Permet de dessiner la méduse sur l'écran.
     public void draw(double deltaT, GraphicsContext context){
