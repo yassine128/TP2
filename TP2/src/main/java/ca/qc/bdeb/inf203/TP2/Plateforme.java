@@ -29,19 +29,46 @@ public class Plateforme extends GameObject{
         boolean jump = Input.isKeyPressed(KeyCode.SPACE) || Input.isKeyPressed(KeyCode.UP);
     }
 
+    /**
+     * Si la méthode intercep retourne true alors nous alors update la position de la méduse pour qu'elle reste sur la plateforme
+     * @param meduse
+     * @param plateforme
+     */
     public void collision(Meduse meduse, Plateforme plateforme){
-        // Vérifie que la méduse est sur une plateforme
         boolean jump = Input.isKeyPressed(KeyCode.SPACE) || Input.isKeyPressed(KeyCode.UP);
-        if (meduse.vy > 0 && (meduse.y + meduse.h) >= plateforme.y && (meduse.x + meduse.w) > plateforme.x && (meduse.x) < (plateforme.x + plateforme.w)) {
-
-            // Teleporte la méduse pour qu'elle ne rentre pas dans la plateforme
-            if ((meduse.y + meduse.h) > plateforme.y){
-                meduse.y = plateforme.y-meduse.h;
-            }
-            meduse.setVy(0);
-            if (jump)
-                meduse.sauter(jump);
-
-        }
+        fixPosition(meduse, plateforme);
+        if (jump)
+            meduse.sauter(jump);
     }
+
+
+    /**
+     * Teleporte le personnage pour qu'il ne reste pas coincé dans la plateforme
+     * @param meduse
+     * @param plateforme
+     */
+    public void fixPosition(Meduse meduse, Plateforme plateforme){
+        // Teleporte la méduse pour qu'elle ne rentre pas dans la plateforme
+        if ((meduse.y + meduse.h) > plateforme.y){
+            meduse.setY(plateforme.y-meduse.h);
+        }
+
+        meduse.setVy(0);
+    }
+
+
+    /**
+     * Vérrifie si la méduse est entré en collision avec une plateforme
+     * @param meduse
+     * @param plateforme
+     * @return
+     */
+    public boolean intercept(Meduse meduse, Plateforme plateforme){
+        if (meduse.vy > 0 && (meduse.x + meduse.w) >= plateforme.x && (meduse.x) <= (plateforme.x + plateforme.w)) {
+            if ((meduse.y + meduse.h) >= plateforme.y && (meduse.y + meduse.h) <= (plateforme.y+plateforme.h)+10)
+                return true;
+        }
+        return false;
+    }
+
 }

@@ -1,6 +1,7 @@
 package ca.qc.bdeb.inf203.TP2;
 
 
+import com.sun.javafx.application.ParametersImpl;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -46,11 +47,15 @@ public class Main extends Application {
 
         ArrayList<Plateforme> listePlateforme = new ArrayList<>();
 
-        Plateforme plateforme = new Plateforme();
+        Plateforme plateforme = new PlateformeMouvante();
 
         listePlateforme.add(plateforme);
-        listePlateforme.add(new Plateforme());
-        listePlateforme.add(new Plateforme());
+        listePlateforme.add(new PlateformeRebond());
+        listePlateforme.add(new PlateformeEphemere());
+        listePlateforme.add(new PlateformeEphemere());
+
+
+        Partie partie = new Partie(listePlateforme, meduse);
 
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
@@ -64,14 +69,9 @@ public class Main extends Application {
                 double deltaT = (now - lastTime) * 1e-9;
 
                 context.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
-                meduse.update(deltaT);
-                meduse.draw(deltaT, context);
+                partie.update(deltaT);
+                partie.draw(deltaT, context);
 
-                for (Plateforme p : listePlateforme){
-                    p.collision(meduse, p);
-                    p.update(deltaT);
-                    p.draw(deltaT, context);
-                }
 
                 lastTime = now;
             }

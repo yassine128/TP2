@@ -49,7 +49,6 @@ public class Meduse extends GameObject{
         }
 
         if (y + h >= Main.HEIGHT) {
-            System.out.println(y+h + " : " + Main.HEIGHT);
             sauter(jump);
         }
         updateX(dt);
@@ -104,6 +103,9 @@ public class Meduse extends GameObject{
 
     public void setVy(double vy){
         this.vy = vy;
+    }
+    public void setY(double y){
+        this.y = y;
     }
 
 }
