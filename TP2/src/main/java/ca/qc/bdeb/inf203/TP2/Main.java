@@ -8,8 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.lang.reflect.Array;
@@ -47,7 +49,7 @@ public class Main extends Application {
 
         ArrayList<Plateforme> listePlateforme = new ArrayList<>();
 
-        Plateforme plateforme = new PlateformeMouvante();
+        Plateforme plateforme = new Plateforme();
 
         listePlateforme.add(plateforme);
         listePlateforme.add(new PlateformeRebond());
@@ -56,6 +58,7 @@ public class Main extends Application {
 
 
         Partie partie = new Partie(listePlateforme, meduse);
+
 
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
@@ -69,14 +72,15 @@ public class Main extends Application {
                 double deltaT = (now - lastTime) * 1e-9;
 
                 context.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
-                partie.update(deltaT);
+                context.setFill(Color.DARKBLUE);
+                context.fillRect(0, 0, WIDTH, HEIGHT);
+                partie.update(deltaT, context);
                 partie.draw(deltaT, context);
 
 
                 lastTime = now;
             }
         }; timer.start();
-
 
         //Event
         scene.setOnKeyPressed(event -> {

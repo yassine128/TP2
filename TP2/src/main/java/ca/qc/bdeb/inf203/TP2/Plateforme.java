@@ -19,6 +19,11 @@ public class Plateforme extends GameObject{
         this.x = rand.nextInt((Main.WIDTH - w));
     }
 
+    public void drawDebug(double dt, GraphicsContext context){
+        context.setFill(Color.YELLOW);
+        context.fillRect(x, y, w, h);
+    }
+
     @Override
     public void draw(double dt, GraphicsContext context) {
         context.setFill(Color.rgb(230, 134, 58));
