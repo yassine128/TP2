@@ -10,14 +10,6 @@ public class Meduse extends GameObject{
 
     private int indexImages;
     private double tempsTotal;
-    private double x;
-    private double y;
-    private double vx;
-    private double vy;
-    private double ax;
-    private int ay = 1200;
-    private int w = 50;
-    private int h = 50;
 
     private String[] frames = {"meduse1", "meduse1-g", "meduse2", "meduse2-g", "meduse3", "meduse3-g", "meduse4", "meduse4-g", "meduse5", "meduse5-g", "meduse6", "meduse6-g"};
 
@@ -28,6 +20,9 @@ public class Meduse extends GameObject{
         this.vx = 0;
         this.vy = 0;
         this.ax = 100;
+        this.ay = 1200;
+        this.h = 50;
+        this.w = 50;
     }
 
     //Permet de mettre à jour la position de la méduse.
@@ -53,7 +48,10 @@ public class Meduse extends GameObject{
             vx += dt*ax;
         }
 
-        sauter(jump);
+        if (y + h >= Main.HEIGHT) {
+            System.out.println(y+h + " : " + Main.HEIGHT);
+            sauter(jump);
+        }
         updateX(dt);
         updateY(dt);
         if (y + h < Main.HEIGHT) {
@@ -67,13 +65,18 @@ public class Meduse extends GameObject{
     //Fait sauter le personnage
     public void sauter(boolean jump){
         // Sauter avec Espace ou Flèche vers le haut
-        if (jump && y + h >= Main.HEIGHT)
+        if (jump)
             vy = -600;
     }
 
     //Update la position de Y
     public void updateY(double dt){
         y += dt*vy;
+
+        if (y + h > Main.HEIGHT){
+            y = Main.HEIGHT-h;
+        }
+
     }
 
     //Update la position de X
@@ -95,8 +98,12 @@ public class Meduse extends GameObject{
         indexImages = (int) Math.floor(tempsTotal * 8) % (frames.length);
 
         Image personnage = new Image(frames[indexImages]+".png", 50, 50, true, false);
-        context.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
+        //context.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
         context.drawImage(personnage, x, y);
+    }
+
+    public void setVy(double vy){
+        this.vy = vy;
     }
 
 }

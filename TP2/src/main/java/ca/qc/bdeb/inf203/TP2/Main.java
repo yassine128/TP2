@@ -11,6 +11,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Main extends Application {
 
     private Stage primaryStage = new Stage();
@@ -40,6 +43,15 @@ public class Main extends Application {
 
         Meduse meduse = new Meduse(0, HEIGHT-50);
 
+
+        ArrayList<Plateforme> listePlateforme = new ArrayList<>();
+
+        Plateforme plateforme = new Plateforme();
+
+        listePlateforme.add(plateforme);
+        listePlateforme.add(new Plateforme());
+        listePlateforme.add(new Plateforme());
+
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
             @Override
@@ -51,8 +63,15 @@ public class Main extends Application {
 
                 double deltaT = (now - lastTime) * 1e-9;
 
+                context.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
                 meduse.update(deltaT);
                 meduse.draw(deltaT, context);
+
+                for (Plateforme p : listePlateforme){
+                    p.collision(meduse, p);
+                    p.update(deltaT);
+                    p.draw(deltaT, context);
+                }
 
                 lastTime = now;
             }
