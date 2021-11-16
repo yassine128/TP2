@@ -1,10 +1,8 @@
 package ca.qc.bdeb.inf203.TP2;
 
-public class Camera {
-    private  double y;
-    private double vy;
-    private double ay;
+import javafx.scene.canvas.GraphicsContext;
 
+public class Camera extends GameObject{
 
     public Camera(double y,double vy, double ay) {
         this.y=y;
@@ -22,5 +20,10 @@ public class Camera {
 
     public double getY() {
         return y;
+    }
+
+    @Override
+    public void draw(double dt, GraphicsContext context, Camera camera) {
+
     }
 }

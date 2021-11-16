@@ -76,4 +76,8 @@ public class Plateforme extends GameObject{
         return false;
     }
 
+    public double getY(){
+        return y;
+    }
+
 }

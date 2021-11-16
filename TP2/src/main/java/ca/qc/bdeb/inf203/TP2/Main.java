@@ -1,19 +1,30 @@
 package ca.qc.bdeb.inf203.TP2;
 
-
 import com.sun.javafx.application.ParametersImpl;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -22,7 +33,7 @@ public class Main extends Application {
     private Stage primaryStage = new Stage();
     public static int WIDTH = 350;
     public static int HEIGHT = 480;
-
+    public Partie partie;
     public static void main(String[] args) {
         launch(args);
     }
@@ -30,12 +41,64 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Scene jeux = jeux();
+        Scene score = scoreScene();
 
         primaryStage.setScene(jeux);
         primaryStage.setTitle("Super Méduse Bros");
         primaryStage.getIcons().add(new Image("meduse1.png"));
         primaryStage.show();
     }
+
+
+    public Scene scoreScene() throws IOException {
+
+        Scores monScore = new Scores();
+
+        VBox scorePage = new VBox();
+        Scene scene = new Scene(scorePage, WIDTH, HEIGHT);
+
+        Text titre = new Text("Meilleurs Scores");
+        titre.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+
+        ScrollPane scroll = new ScrollPane();
+        scroll.setPrefSize(330, 300);
+        scroll.setContent(monScore.readScore());
+
+        HBox ajoutScore = new HBox();
+        Text nom = new Text("Nom:");
+        TextField zoneText = new TextField();
+        Button save = new Button("Sauvegarder!");
+        ajoutScore.getChildren().addAll(nom, zoneText, save);
+        ajoutScore.setAlignment(Pos.CENTER);
+
+        Button retour = new Button("Retourner à l'acceuil");
+
+        scorePage.getChildren().addAll(titre, scroll, ajoutScore, retour);
+        scorePage.setAlignment(Pos.TOP_CENTER);
+        scorePage.setSpacing(20);
+        scorePage.setPadding(new Insets(10, 10, 10, 10));
+
+
+        //Event
+        save.setOnAction(event -> {
+            Camera camera = partie.camera;
+            try {
+                monScore.writeScore(camera, zoneText.getText());
+                scroll.setContent(monScore.readScore());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        retour.setOnAction(event -> {
+            primaryStage.setScene(jeux());
+        });
+
+
+        return scene;
+    }
+
 
     public Scene jeux(){
         Pane  root = new Pane();
@@ -57,7 +120,7 @@ public class Main extends Application {
         listePlateforme.add(new PlateformeEphemere());
 
 
-        Partie partie = new Partie(listePlateforme, meduse);
+        partie = new Partie(listePlateforme, meduse);
 
 
         AnimationTimer timer = new AnimationTimer() {
@@ -74,6 +137,7 @@ public class Main extends Application {
                 context.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
                 context.setFill(Color.DARKBLUE);
                 context.fillRect(0, 0, WIDTH, HEIGHT);
+                partie.creationPlateforme(listePlateforme);
                 partie.update(deltaT, context);
                 partie.draw(deltaT, context);
 
@@ -89,7 +153,6 @@ public class Main extends Application {
         scene.setOnKeyReleased((e) -> {
             Input.setKeyPressed(e.getCode(), false);
         });
-
 
         return scene;
     }

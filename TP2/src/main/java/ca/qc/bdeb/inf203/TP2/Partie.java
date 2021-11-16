@@ -19,8 +19,23 @@ public class Partie {
     boolean debugHold = false;
     boolean oldDebug = false;
     double oldY;
+    ArrayList<Plateforme> toRemove = new ArrayList<>();
+    Plateforme[] typePlate = {new Plateforme(), new PlateformeRebond(), new PlateformeEphemere(), new PlateformeMouvante()};
     private Bulle[][] bulles;
 
+
+    public void creationPlateforme(ArrayList<Plateforme> listePlateforme){
+        for (Plateforme p : listePlateforme){
+            if (Main.HEIGHT - p.y <= Math.abs(camera.y)){
+                toRemove.add(p);
+            }
+        }
+        listePlateforme.removeAll(toRemove);
+        System.out.println(listePlateforme.size());
+        Random rand = new Random();
+        int randomVal = rand.nextInt(3);
+        listePlateforme.add(typePlate[randomVal]);
+    }
 
     public Partie(ArrayList<Plateforme> listePlateforme, Meduse meduse) {
         this.listePlateforme = listePlateforme;
@@ -32,7 +47,6 @@ public class Partie {
     public void draw(double dt, GraphicsContext context){
         meduse.draw(dt, context,camera);
     }
-
 
     public void drawDebugInterface(GraphicsContext context){
         context.setFill(Color.PALEVIOLETRED);
