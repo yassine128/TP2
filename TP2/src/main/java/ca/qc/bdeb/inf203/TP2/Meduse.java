@@ -26,15 +26,15 @@ public class Meduse extends GameObject{
     }
 
     //Permet de mettre à jour la position de la méduse.
-    public void update(double deltaT){
+    public void update(double deltaT, Camera camera){
         boolean left = Input.isKeyPressed(KeyCode.LEFT);
         boolean right = Input.isKeyPressed(KeyCode.RIGHT);
         boolean jump = Input.isKeyPressed(KeyCode.SPACE) || Input.isKeyPressed(KeyCode.UP);
-        movement(left, right, jump, deltaT);
+        movement(left, right, jump, deltaT, camera);
     }
 
     //Déplacer le personnage
-    public void movement(boolean left, boolean right, boolean jump, double dt){
+    public void movement(boolean left, boolean right, boolean jump, double dt, Camera camera){
         if (right && x+w < Main.WIDTH){
             vx += dt*ax;
         }
@@ -52,7 +52,7 @@ public class Meduse extends GameObject{
             sauter(jump);
         }
         updateX(dt);
-        updateY(dt);
+        updateY(dt,camera);
         if (y + h < Main.HEIGHT) {
             vy = vy + ay * dt;
         }
@@ -69,11 +69,15 @@ public class Meduse extends GameObject{
     }
 
     //Update la position de Y
-    public void updateY(double dt){
+    public void updateY(double dt, Camera camera){
         y += dt*vy;
 
         if (y + h > Main.HEIGHT){
             y = Main.HEIGHT-h;
+        }
+        if (y-camera.getY()<0.25*Main.HEIGHT){
+            camera.ajouterY(-(0.25*Main.HEIGHT-(y-camera.getY())));
+            //y=Main.HEIGHT*0.25;
         }
 
     }
@@ -92,13 +96,14 @@ public class Meduse extends GameObject{
     }
 
     //Permet de dessiner la méduse sur l'écran.
-    public void draw(double deltaT, GraphicsContext context){
+    public void draw(double deltaT, GraphicsContext context,Camera camera){
         tempsTotal += deltaT;
         indexImages = (int) Math.floor(tempsTotal * 8) % (frames.length);
 
         Image personnage = new Image(frames[indexImages]+".png", 50, 50, true, false);
         //context.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
-        context.drawImage(personnage, x, y);
+        context.drawImage(personnage, x, y- camera.getY());
+
     }
 
     public void setVy(double vy){

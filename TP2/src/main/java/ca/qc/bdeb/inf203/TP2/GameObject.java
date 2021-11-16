@@ -9,7 +9,7 @@ public abstract class GameObject {
     protected double ax, ay;
     protected int w, h;
 
-    public abstract void draw(double dt, GraphicsContext context);
+    public abstract void draw(double dt, GraphicsContext context, Camera camera);
 
 
 }

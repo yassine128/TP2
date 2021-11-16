@@ -30,9 +30,9 @@ public class PlateformeEphemere extends Plateforme{
 
 
     @Override
-    public void draw(double dt, GraphicsContext context) {
+    public void draw(double dt, GraphicsContext context, Camera camera) {
         context.setFill(Color.BLACK);
-        context.fillRect(x, y, w, h);
+        context.fillRect(x, y-camera.getY(), w, h);
     }
 
 }

@@ -19,15 +19,15 @@ public class Plateforme extends GameObject{
         this.x = rand.nextInt((Main.WIDTH - w));
     }
 
-    public void drawDebug(double dt, GraphicsContext context){
+    public void drawDebug(double dt, GraphicsContext context, Camera camera){
         context.setFill(Color.YELLOW);
-        context.fillRect(x, y, w, h);
+        context.fillRect(x, y-camera.getY(), w, h);
     }
 
     @Override
-    public void draw(double dt, GraphicsContext context) {
+    public void draw(double dt, GraphicsContext context, Camera camera) {
         context.setFill(Color.rgb(230, 134, 58));
-        context.fillRect(x, y, w, h);
+        context.fillRect(x, y- camera.getY(), w, h);
     }
 
     public void update(double deltaT){

@@ -12,9 +12,9 @@ public class PlateformeMouvante extends Plateforme{
     }
 
     @Override
-    public void draw(double dt, GraphicsContext context) {
+    public void draw(double dt, GraphicsContext context, Camera camera) {
         context.setFill(Color.rgb(184, 15, 36));
-        context.fillRect(x, y, w, h);
+        context.fillRect(x, y-camera.getY(), w, h);
     }
 
     public void update(double deltaT){
