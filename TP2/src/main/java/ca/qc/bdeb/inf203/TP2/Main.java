@@ -34,6 +34,7 @@ public class Main extends Application {
     public static int WIDTH = 350;
     public static int HEIGHT = 480;
     public Partie partie;
+    public static ArrayList<Plateforme> listePlateforme = new ArrayList<>();
     public static void main(String[] args) {
         launch(args);
     }
@@ -109,19 +110,7 @@ public class Main extends Application {
 
         Meduse meduse = new Meduse(0, HEIGHT-50);
 
-
-        ArrayList<Plateforme> listePlateforme = new ArrayList<>();
-
-        Plateforme plateforme = new Plateforme();
-
-        listePlateforme.add(plateforme);
-        listePlateforme.add(new PlateformeRebond());
-        listePlateforme.add(new PlateformeEphemere());
-        listePlateforme.add(new PlateformeEphemere());
-
-
-        partie = new Partie(listePlateforme, meduse);
-
+        partie = new Partie(meduse);
 
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
@@ -137,7 +126,7 @@ public class Main extends Application {
                 context.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
                 context.setFill(Color.DARKBLUE);
                 context.fillRect(0, 0, WIDTH, HEIGHT);
-                partie.creationPlateforme(listePlateforme);
+                partie.creationPlateforme();
                 partie.update(deltaT, context);
                 partie.draw(deltaT, context);
 

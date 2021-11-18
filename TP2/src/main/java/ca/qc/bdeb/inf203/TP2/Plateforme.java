@@ -10,7 +10,7 @@ public class Plateforme extends GameObject{
 
     protected static double posY = 0;
 
-    public Plateforme() {
+    public Plateforme(double y) {
         this.h = 10;
         posY += 100;
         this.y = Main.HEIGHT-posY;

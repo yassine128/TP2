@@ -8,37 +8,46 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
+import java.util.MissingFormatArgumentException;
 import java.util.Random;
 
 public class Partie {
     private double delai=3;
-
-    ArrayList<Plateforme> listePlateforme = new ArrayList<>();
     Meduse meduse;
     Camera camera;
     boolean debugHold = false;
     boolean oldDebug = false;
     double oldY;
-    ArrayList<Plateforme> toRemove = new ArrayList<>();
-    Plateforme[] typePlate = {new Plateforme(), new PlateformeRebond(), new PlateformeEphemere(), new PlateformeMouvante()};
+    Plateforme[] typePlate = {};
     private Bulle[][] bulles;
+    int lastY = 0;
 
 
-    public void creationPlateforme(ArrayList<Plateforme> listePlateforme){
-        for (Plateforme p : listePlateforme){
-            if (Main.HEIGHT - p.y <= Math.abs(camera.y)){
-                toRemove.add(p);
+    public void creationPlateforme(){
+        if (-(int) camera.y >= lastY+50){
+            lastY = -(int) camera.y;
+
+            //Il reste à supprimer les anciennes plateformes.
+
+            Random rand = new Random();
+            int randomVal = rand.nextInt(4);
+            switch (randomVal){
+                case 0: Main.listePlateforme.add(new Plateforme(camera.y+Main.HEIGHT));break;
+                case 1: Main.listePlateforme.add(new PlateformeEphemere(camera.y+Main.HEIGHT));break;
+                case 2: Main.listePlateforme.add(new PlateformeMouvante(camera.y+Main.HEIGHT));break;
+                case 3: Main.listePlateforme.add(new PlateformeRebond(camera.y+Main.HEIGHT));break;
             }
         }
-        listePlateforme.removeAll(toRemove);
-        System.out.println(listePlateforme.size());
-        Random rand = new Random();
-        int randomVal = rand.nextInt(3);
-        listePlateforme.add(typePlate[randomVal]);
     }
 
-    public Partie(ArrayList<Plateforme> listePlateforme, Meduse meduse) {
-        this.listePlateforme = listePlateforme;
+    public Partie(Meduse meduse) {
+
+        Main.listePlateforme.add(new Plateforme(100));
+        Main.listePlateforme.add(new Plateforme(200));
+        Main.listePlateforme.add(new Plateforme(300));
+        Main.listePlateforme.add(new Plateforme(400));
+
+
         this.meduse = meduse;
         this.camera=new Camera(0,0,-5);
         this.bulles= new Bulle[3][5];
@@ -80,7 +89,7 @@ public class Partie {
             drawDebugInterface(context);
 
 
-        for (Plateforme p : listePlateforme) {
+        for (Plateforme p : Main.listePlateforme) {
             if (p.intercept(meduse, p)) {
                 if (debugHold) {
                     p.drawDebug(dt, context, camera);

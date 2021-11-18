@@ -9,6 +9,10 @@ public class PlateformeEphemere extends Plateforme{
 
     private boolean quitterPlateforme = false;
 
+    public PlateformeEphemere(double y) {
+        super(y);
+    }
+
 
     public void update(double deltaT){
         if (quitterPlateforme){
