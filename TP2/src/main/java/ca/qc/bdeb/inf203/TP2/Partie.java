@@ -138,8 +138,6 @@ public class Partie  {
 
     public void stopPartie() throws InterruptedException {
         camera.vy = 0;
-        //java.util.concurrent.TimeUnit.SECONDS.sleep(3); //Pause 3 secondes
         end = true;
-
     }
 }

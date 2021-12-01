@@ -38,6 +38,7 @@ public class Main extends Application {
     public Partie partie;
     public static ArrayList<Plateforme> listePlateforme = new ArrayList<>();
     public static int Page;
+    private double mort = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -216,13 +217,18 @@ public class Main extends Application {
 
                 //change scene
                 if (partie.end){
-                    try {
-                        primaryStage.setScene(scoreScene());
-                        this.stop();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    mort += deltaT;
+                    if (mort >= 3) {
+                        try {
+                            primaryStage.setScene(scoreScene());
+                            this.stop();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
+                else
+                    mort = 0;
                 if (Input.isKeyPressed(KeyCode.ESCAPE)){
                     try {
                         primaryStage.setScene(sceneAccueil());
