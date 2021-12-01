@@ -10,6 +10,4 @@ public abstract class GameObject {
     protected int w, h;
 
     public abstract void draw(double dt, GraphicsContext context, Camera camera);
-
-
 }

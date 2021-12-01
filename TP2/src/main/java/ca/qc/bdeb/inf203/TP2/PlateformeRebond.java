@@ -6,6 +6,10 @@ import javafx.scene.paint.Color;
 
 public class PlateformeRebond extends Plateforme {
 
+    public PlateformeRebond(double y) {
+        super(y);
+    }
+
     @Override
     public void collision(Meduse meduse, Plateforme plateforme){
         boolean jump = Input.isKeyPressed(KeyCode.SPACE) || Input.isKeyPressed(KeyCode.UP);

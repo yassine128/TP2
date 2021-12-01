@@ -7,7 +7,8 @@ public class PlateformeMouvante extends Plateforme{
     private double nbSecondeTotal;
     private double xBase;
 
-    public PlateformeMouvante() {
+    public PlateformeMouvante(double y) {
+        super(y);
         this.xBase = x;
     }
 

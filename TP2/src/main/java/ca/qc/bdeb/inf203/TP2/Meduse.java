@@ -10,7 +10,7 @@ public class Meduse extends GameObject{
 
     private int indexImages;
     private double tempsTotal;
-
+    protected boolean vivante = true;
     private String[] frames = {"meduse1", "meduse1-g", "meduse2", "meduse2-g", "meduse3", "meduse3-g", "meduse4", "meduse4-g", "meduse5", "meduse5-g", "meduse6", "meduse6-g"};
 
 

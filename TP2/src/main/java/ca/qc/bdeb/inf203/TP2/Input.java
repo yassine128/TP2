@@ -7,7 +7,7 @@ public class Input {
 
     // On **associe** chaque touche à vrai/faux, selon si on a
     // appuyé dessus
-    private static HashMap<KeyCode, Boolean> touches = new HashMap<>();
+    public static HashMap<KeyCode, Boolean> touches = new HashMap<>();
 
     // Personnage.update() va demander si certaines touches sont
     // appuyées ou non

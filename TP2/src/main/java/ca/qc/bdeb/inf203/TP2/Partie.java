@@ -8,31 +8,46 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
+import java.util.MissingFormatArgumentException;
 import java.util.Random;
 
-public class Partie {
+public class Partie  {
     private double delai=3;
-
-    ArrayList<Plateforme> listePlateforme = new ArrayList<>();
     Meduse meduse;
     Camera camera;
     boolean debugHold = false;
     boolean oldDebug = false;
     double oldY;
     private Bulle[][] bulles;
+    public boolean end = false;
 
 
-    public Partie(ArrayList<Plateforme> listePlateforme, Meduse meduse) {
-        this.listePlateforme = listePlateforme;
-        this.meduse = meduse;
-        this.camera=new Camera(0,0,-5);
-        this.bulles= new Bulle[3][5];
+    public void creationPlateforme(){
+        Random random=new Random();
+
+        for (int i=0;i<4;i++){
+            int randomVal= random.nextInt(4);
+            switch (randomVal){
+                case 0: Main.listePlateforme.add(new Plateforme(i*100));break;
+                case 1: Main.listePlateforme.add(new PlateformeEphemere(i*100));break;
+                case 2: Main.listePlateforme.add(new PlateformeMouvante(i*100));break;
+                case 3: Main.listePlateforme.add(new PlateformeRebond(i*100));break;
+            }
+        }
+    }
+
+    public Partie() {
+        Input.touches.clear();
+        Plateforme.posY = 0;
+        Main.listePlateforme.clear();
+        meduse = new Meduse(0, Main.HEIGHT-50);
+        camera = new Camera(0,0,-5);
+        bulles= new Bulle[3][5];
     }
 
     public void draw(double dt, GraphicsContext context){
         meduse.draw(dt, context,camera);
     }
-
 
     public void drawDebugInterface(GraphicsContext context){
         context.setFill(Color.PALEVIOLETRED);
@@ -47,7 +62,7 @@ public class Partie {
         oldY = meduse.y;
     }
 
-    public void update(double dt, GraphicsContext context) {
+    public void update(double dt, GraphicsContext context) throws InterruptedException {
         delai+=dt;
         meduse.update(dt, camera);
         camera.update(dt);
@@ -66,7 +81,7 @@ public class Partie {
             drawDebugInterface(context);
 
 
-        for (Plateforme p : listePlateforme) {
+        for (Plateforme p : Main.listePlateforme) {
             if (p.intercept(meduse, p)) {
                 if (debugHold) {
                     p.drawDebug(dt, context, camera);
@@ -92,12 +107,12 @@ public class Partie {
             delai-=3;
             for (int i=0;i<3;i++){
                 Random random=new Random();
-                double x= random.nextDouble()*Main.WIDTH;
+                double pos= random.nextDouble()*Main.WIDTH;
                 for (int j=0;j<5;j++){
-                    double x2= x+random.nextDouble()*40-20;
+                    double pos2= pos+random.nextDouble()*40-20;
                     double vx= -(random.nextDouble()*100+350);
                     double r= random.nextDouble()*30+10;
-                    bulles[i][j]=new Bulle(x2,Main.HEIGHT,vx,r);
+                    bulles[i][j]=new Bulle(pos2,Main.HEIGHT,vx,r);
                 }
             }
         }
@@ -107,5 +122,24 @@ public class Partie {
                 bulles[i][j].draw(context,camera);
             }
         }
+
+        if (camera.y+Main.HEIGHT < meduse.y) {
+            context.setFill(Color.RED);
+            context.setFont(new Font(40));
+            context.fillText("Partie Terminée", Main.WIDTH/2, Main.HEIGHT/2);
+            stopPartie();
+        }
+
+        //Delete plateformes
+        if (Main.listePlateforme.get(0).getY()>camera.getY()+Main.HEIGHT+meduse.h){
+            Main.listePlateforme.remove(0);
+        }
+    }
+
+    public void stopPartie() throws InterruptedException {
+        camera.vy = 0;
+        //java.util.concurrent.TimeUnit.SECONDS.sleep(3); //Pause 3 secondes
+        end = true;
+
     }
 }
